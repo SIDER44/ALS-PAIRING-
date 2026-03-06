@@ -1,0 +1,217 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>ALMEER XMD — Pairing Code</title>
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+
+    body {
+      font-family: 'Segoe UI', sans-serif;
+      background: #0d1117;
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: #fff;
+    }
+
+    .card {
+      background: #161b22;
+      border: 1px solid #30363d;
+      border-radius: 20px;
+      padding: 40px 32px;
+      width: 90%;
+      max-width: 420px;
+      text-align: center;
+    }
+
+    .logo { font-size: 48px; margin-bottom: 10px; }
+
+    h1 {
+      font-size: 24px;
+      font-weight: 800;
+      background: linear-gradient(135deg, #25d366, #128c7e);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      margin-bottom: 6px;
+    }
+
+    .sub { color: #8b949e; font-size: 13px; margin-bottom: 28px; }
+
+    .input-group {
+      display: flex;
+      gap: 10px;
+      margin-bottom: 20px;
+    }
+
+    input {
+      flex: 1;
+      background: #0d1117;
+      border: 1px solid #30363d;
+      border-radius: 10px;
+      padding: 14px 16px;
+      color: #fff;
+      font-size: 15px;
+      outline: none;
+      transition: border-color 0.2s;
+    }
+    input:focus { border-color: #25d366; }
+    input::placeholder { color: #8b949e; }
+
+    button {
+      background: linear-gradient(135deg, #25d366, #128c7e);
+      border: none;
+      border-radius: 10px;
+      padding: 14px 22px;
+      color: #fff;
+      font-size: 14px;
+      font-weight: 700;
+      cursor: pointer;
+      transition: opacity 0.2s, transform 0.2s;
+      white-space: nowrap;
+    }
+    button:hover    { opacity: 0.85; transform: scale(1.02); }
+    button:disabled { opacity: 0.5; cursor: not-allowed; }
+
+    .hint {
+      color: #8b949e;
+      font-size: 12px;
+      margin-bottom: 24px;
+    }
+
+    .result { min-height: 60px; }
+
+    .code-box {
+      background: #0d1117;
+      border: 2px solid #25d366;
+      border-radius: 12px;
+      padding: 20px;
+      margin-top: 10px;
+    }
+    .code-label { color: #8b949e; font-size: 12px; margin-bottom: 8px; }
+    .code-value {
+      font-size: 28px;
+      font-weight: 900;
+      letter-spacing: 6px;
+      color: #25d366;
+      cursor: pointer;
+      transition: opacity 0.2s;
+    }
+    .code-value:hover { opacity: 0.7; }
+    .copy-hint { color: #8b949e; font-size: 11px; margin-top: 8px; }
+
+    .error-msg { color: #f85149; font-size: 13px; margin-top: 10px; }
+    .loading   { color: #58a6ff; font-size: 13px; margin-top: 10px; }
+
+    .steps {
+      text-align: left;
+      background: #0d1117;
+      border-radius: 10px;
+      padding: 16px;
+      margin-top: 20px;
+    }
+    .step {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      margin-bottom: 8px;
+      font-size: 13px;
+      color: #c9d1d9;
+    }
+    .step:last-child { margin-bottom: 0; }
+    .num {
+      background: #25d366;
+      color: #000;
+      border-radius: 50%;
+      width: 22px; height: 22px;
+      display: flex; align-items: center; justify-content: center;
+      font-weight: bold; font-size: 11px;
+      flex-shrink: 0;
+    }
+
+    .back { display: block; margin-top: 20px; color: #8b949e; font-size: 12px; text-decoration: none; }
+    .back:hover { color: #25d366; }
+  </style>
+</head>
+<body>
+  <div class="card">
+    <div class="logo">🔑</div>
+    <h1>ALMEER XMD</h1>
+    <p class="sub">Enter your number to get a pairing code</p>
+
+    <div class="input-group">
+      <input
+        type="number"
+        id="number"
+        placeholder="254712345678"
+      />
+      <button id="submit">Get Code</button>
+    </div>
+    <p class="hint">Include country code without + (e.g. 254712345678)</p>
+
+    <div class="result" id="result"></div>
+
+    <div class="steps">
+      <div class="step"><div class="num">1</div><span>Enter your WhatsApp number above</span></div>
+      <div class="step"><div class="num">2</div><span>Click <b>Get Code</b> and wait</span></div>
+      <div class="step"><div class="num">3</div><span>Open WhatsApp → ⋮ → <b>Linked Devices</b></span></div>
+      <div class="step"><div class="num">4</div><span>Tap <b>Link with phone number</b> → enter code</span></div>
+    </div>
+
+    <a href="/" class="back">← Back to Home</a>
+  </div>
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/axios/1.6.0/axios.min.js"></script>
+  <script>
+    const btn    = document.getElementById('submit');
+    const input  = document.getElementById('number');
+    const result = document.getElementById('result');
+
+    async function copyCode(code) {
+      await navigator.clipboard.writeText(code);
+      document.getElementById('codeVal').textContent = 'COPIED ✓';
+      setTimeout(() => { document.getElementById('codeVal').textContent = code; }, 1500);
+    }
+
+    btn.addEventListener('click', async () => {
+      const num = input.value.replace(/[^0-9]/g, '').trim();
+
+      if (!num) {
+        result.innerHTML = '<p class="error-msg">❗ Please enter your WhatsApp number.</p>';
+        return;
+      }
+      if (num.length < 10) {
+        result.innerHTML = '<p class="error-msg">❌ Invalid number format! Include country code.</p>';
+        return;
+      }
+
+      btn.disabled = true;
+      btn.textContent = '⏳ Wait...';
+      result.innerHTML = '<p class="loading">🔄 Requesting pairing code, please wait...</p>';
+
+      try {
+        const { data } = await axios.get(`/code?number=${num}`);
+        const code = data.code || 'Service Unavailable';
+
+        if (code === 'Service Unavailable' || code.includes('❗')) {
+          result.innerHTML = `<p class="error-msg">❌ ${code}<br>Try again in a moment.</p>`;
+        } else {
+          result.innerHTML = `
+            <div class="code-box">
+              <p class="code-label">Your Pairing Code</p>
+              <div class="code-value" id="codeVal" onclick="copyCode('${code}')">${code}</div>
+              <p class="copy-hint">👆 Tap to copy</p>
+            </div>`;
+        }
+      } catch (e) {
+        result.innerHTML = '<p class="error-msg">❌ Connection error. Try again.</p>';
+      }
+
+      btn.disabled    = false;
+      btn.textContent = 'Get Code';
+    });
+  </script>
+</body>
+</html>

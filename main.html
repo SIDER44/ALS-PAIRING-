@@ -1,0 +1,169 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>ALMEER XMD — Session Generator</title>
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+
+    body {
+      font-family: 'Segoe UI', sans-serif;
+      background: #0d1117;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      color: #fff;
+      overflow: hidden;
+    }
+
+    /* Animated background */
+    body::before {
+      content: '';
+      position: fixed;
+      top: -50%; left: -50%;
+      width: 200%; height: 200%;
+      background: radial-gradient(ellipse at center, #1a4731 0%, #0d1117 50%, #0d1117 100%);
+      animation: bgPulse 6s ease-in-out infinite;
+      z-index: -1;
+    }
+    @keyframes bgPulse {
+      0%, 100% { transform: scale(1); opacity: 0.5; }
+      50%       { transform: scale(1.1); opacity: 0.8; }
+    }
+
+    .logo {
+      font-size: 56px;
+      margin-bottom: 8px;
+      animation: bounce 2s infinite;
+    }
+    @keyframes bounce {
+      0%, 100% { transform: translateY(0); }
+      50%       { transform: translateY(-10px); }
+    }
+
+    h1 {
+      font-size: 32px;
+      font-weight: 800;
+      background: linear-gradient(135deg, #25d366, #128c7e);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      margin-bottom: 6px;
+      letter-spacing: 2px;
+    }
+
+    .tagline {
+      color: #8b949e;
+      font-size: 14px;
+      margin-bottom: 40px;
+      letter-spacing: 1px;
+    }
+
+    .cards {
+      display: flex;
+      gap: 20px;
+      flex-wrap: wrap;
+      justify-content: center;
+      margin-bottom: 40px;
+    }
+
+    .card {
+      background: #161b22;
+      border: 1px solid #30363d;
+      border-radius: 16px;
+      padding: 30px 24px;
+      width: 200px;
+      text-align: center;
+      text-decoration: none;
+      color: #fff;
+      transition: all 0.3s ease;
+      position: relative;
+      overflow: hidden;
+    }
+    .card::before {
+      content: '';
+      position: absolute;
+      top: 0; left: 0;
+      right: 0; height: 3px;
+      background: linear-gradient(90deg, #25d366, #128c7e);
+      transform: scaleX(0);
+      transition: transform 0.3s ease;
+    }
+    .card:hover { transform: translateY(-6px); border-color: #25d366; box-shadow: 0 12px 40px rgba(37,211,102,0.15); }
+    .card:hover::before { transform: scaleX(1); }
+
+    .card .icon { font-size: 40px; margin-bottom: 12px; }
+    .card h3 { font-size: 16px; font-weight: 700; margin-bottom: 6px; }
+    .card p  { font-size: 12px; color: #8b949e; line-height: 1.5; }
+
+    .card.green  { border-color: #25d366; }
+    .card.blue   { border-color: #58a6ff; }
+    .card.purple { border-color: #bc8cff; }
+
+    .badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      background: #1a4731;
+      border: 1px solid #25d366;
+      border-radius: 20px;
+      padding: 6px 16px;
+      font-size: 12px;
+      color: #25d366;
+      margin-bottom: 30px;
+    }
+    .dot {
+      width: 8px; height: 8px;
+      background: #25d366;
+      border-radius: 50%;
+      animation: pulse 1.5s infinite;
+    }
+    @keyframes pulse { 0%,100%{opacity:1} 50%{opacity:0.3} }
+
+    footer {
+      color: #8b949e;
+      font-size: 12px;
+      text-align: center;
+      margin-top: 10px;
+    }
+    footer a { color: #25d366; text-decoration: none; }
+  </style>
+</head>
+<body>
+  <div class="logo">🤖</div>
+  <h1>ALMEER XMD</h1>
+  <p class="tagline">Advanced WhatsApp Bot — Session Generator</p>
+
+  <div class="badge">
+    <div class="dot"></div>
+    Service Online
+  </div>
+
+  <div class="cards">
+    <a href="/qr" class="card green" target="_blank">
+      <div class="icon">📷</div>
+      <h3>QR Code</h3>
+      <p>Scan QR with WhatsApp to generate session</p>
+    </a>
+
+    <a href="/pair" class="card blue" target="_blank">
+      <div class="icon">🔑</div>
+      <h3>Pairing Code</h3>
+      <p>Enter your number to get a pairing code</p>
+    </a>
+
+    <a href="https://github.com/YOUR_USERNAME/ALMEER-XMD3/fork" class="card purple" target="_blank">
+      <div class="icon">⭐</div>
+      <h3>Fork on GitHub</h3>
+      <p>Fork the ALMEER XMD repository</p>
+    </a>
+  </div>
+
+  <footer>
+    &copy; <span id="yr"></span> ALMEER XMD — Built with ❤️
+    <script>document.getElementById('yr').textContent = new Date().getFullYear();</script>
+  </footer>
+</body>
+</html>
